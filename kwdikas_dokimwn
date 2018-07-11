@@ -1,0 +1,53 @@
+# Find number of unique elements of each column. Convert series to list so to fined the length
+print(len(df["Users"].unique().tolist()))  ==  530418
+print()
+print(len(df["Tags"].unique().tolist()))   ==  175214
+print()
+print(len(df_init["Timestamps"].unique().tolist()))  ==  2556243
+
+# Find the frequency counts of every element
+# print(df["Tags"].value_counts())
+# print(df["Users"].value_counts())
+
+
+# epistrefei ta tags pou emfanizontai perissoteres apo 100 fores
+df_perTag = df.groupby('Tags').filter(lambda x: len(x) >= 1000)
+#print(df_perTag)
+print(df_perTag.shape)
+print('----------')
+
+#svhnei osa emfanizontai perissoteres apo mia fores kai krataei mono thn prwth emfanish tous
+df_perTag2 = df_perTag.drop_duplicates(keep='first')
+print(df_perTag2.shape)
+
+# epistrefei tous Users opou emfanizontai perissoteres apo 17000 fores
+df_perUser = df.groupby('Users').filter(lambda x: len(x) >= 17000)
+print(df_perUser.shape)
+df_perUser2 = df_perUser.drop_duplicates(keep='first')
+print(df_perUser2.shape)
+
+df_per['count'] = df_per.groupby('A')['A'].transform(pd.Series.value_counts)
+
+# print(df_perUser)
+print('----------')
+
+
+# epistrefei ta koina zeugh. pianei kai epistrefei poses fores to kathe zeugos x (user, tag) emfanizetai perissoters apo 2 fores.
+# print(df.groupby(['Users', 'Tags']).filter(lambda x: len(x) >= 2))
+print(pd.concat([df_perTag, df_perUser]))
+
+# kanw merge kai pairnw mono ta stoixeia poy exoyn koina ta dyo dataframes. O analutikos tropos einai autos: print(pd.merge(df_perTag, df_perUser, on = ['Users','Tags']))
+print(pd.merge(df_perTag, df_perUser, on=['Tags', 'Users']))
+
+#ο κωδικας για την εύρεση των tags twn users kai ton arithmos toys me listes kai dictionaries
+d = {k: list(v) for k, v in df.groupby("Users")["Tags"]}
+dict_len = {key: len(d[key]) for key in d}
+sorted_key_list = sorted(dict_len.items(), key=operator.itemgetter(1), reverse=True)
+sorted_dict = [{item[0]: d[item[0]]} for item in sorted_key_list]
+sample_sorted_dict = sorted_dict[:50001]
+print(type(sample_sorted_dict))
+
+#metraw ta tags toy kathe user kai ta taksinomw me descending order
+user_sort = df["Users"].value_counts().sort_values(axis=0, ascending=False)
+#pairnw ena deigma tvn prwtwn 50.000 users
+user_sort = user_sort.nlargest(n=50000)
