@@ -2,9 +2,6 @@ import pandas as pd
 import sklearn
 from sklearn.utils import shuffle
 
-import operator
-import sys
-import numpy
 
 # eisagw to arxeio, diwxnw timestamps and edges kai ta dipla.
 df_init = pd.read_csv("twitterex_ut.txt", sep=" ", header=None, names=["Tags", "Users", "Edges", "Timestamps"])
@@ -50,9 +47,10 @@ final = tag_count.drop(['count_tag', 'count_df'], axis=1)
 # shuffle my final dataframe so to not be sorted
 final = sklearn.utils.shuffle(final)
 
-final.to_csv('final.csv', sep=' ')
+
 
 print(len(final['Users'].unique().tolist()))
 print(len(final['Tags'].unique().tolist()))
-print
-print(final[:100])
+print(final.info())
+
+final.to_csv('final.csv', sep=' ')
