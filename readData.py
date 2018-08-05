@@ -21,7 +21,7 @@ sample = df.sort_values('count', ascending=False)
 user_count = sample.loc[:, ('Users', 'count')].drop_duplicates(keep="first")
 
 # keep the first 50000 users and join two dataframes, user_count and sample, by key=count
-user_count = user_count[:50000].join(sample.set_index('Users'), on='Users', lsuffix="_user", rsuffix="_df")
+user_count = user_count[:5000].join(sample.set_index('Users'), on='Users', lsuffix="_user", rsuffix="_df")
 
 # drop column=count and my semifinal dataframe consists of 50000 most tagged users with their tags
 semifinal = user_count.drop(['count_user', 'count_df'], axis=1)
@@ -40,7 +40,7 @@ tag_count = semifinal.sort_values('count', ascending=False)
 
 tag_count = tag_count.loc[:, ('Tags', 'count')].drop_duplicates(keep="first")
 
-tag_count = tag_count[:10000].join(semifinal.set_index('Tags'), on='Tags', lsuffix="_tag", rsuffix="_df")
+tag_count = tag_count[:1000].join(semifinal.set_index('Tags'), on='Tags', lsuffix="_tag", rsuffix="_df")
 
 final = tag_count.drop(['count_tag', 'count_df'], axis=1)
 
